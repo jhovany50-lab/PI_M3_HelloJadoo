@@ -125,11 +125,45 @@ const routes = {
 `,
 
   "/about": `
-    <section class="page">
-      <h1>ℹ️ Acerca de Hello Jadoo</h1>
-      <p>Conoce más sobre nuestro proyecto.</p>
-    </section>
-  `
+  <section class="page about-page">
+    <h1>ℹ️ Acerca de Hello Jadoo</h1>
+
+    <p>
+      Jadoo es una compañera virtual diseñada para estudiantes de secundaria.
+      Su objetivo es acompañar, conversar y apoyar el aprendizaje de una forma
+      cercana, sencilla y divertida.
+    </p>
+
+    <div class="about-grid">
+      <article class="about-card">
+        <h2>💗 ¿Quién es Jadoo?</h2>
+        <p>
+          Jadoo es una compañera virtual alegre, paciente y motivadora.
+          Puede conversar con los estudiantes y acompañarlos durante sus
+          actividades de aprendizaje.
+        </p>
+      </article>
+
+      <article class="about-card">
+        <h2>📚 ¿Cómo puede ayudar?</h2>
+        <p>
+          Puede explicar conceptos, ayudar a comprender tareas, practicar
+          matemáticas y preparar ejercicios o pequeñas evaluaciones.
+          Su objetivo es ayudar al estudiante a aprender paso a paso.
+        </p>
+      </article>
+
+      <article class="about-card">
+        <h2>🤖 ¿Cómo funciona?</h2>
+        <p>
+          Hello Jadoo utiliza JavaScript y una arquitectura SPA para la
+          navegación. Las respuestas de Jadoo son generadas mediante Gemini AI
+          a través de una función serverless desplegada en Vercel.
+        </p>
+      </article>
+    </div>
+  </section>
+`,
 };
 
 // Renderiza la vista correspondiente a la ruta

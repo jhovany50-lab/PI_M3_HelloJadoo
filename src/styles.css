@@ -385,6 +385,56 @@ img {
 }
 
 /* ================================
+   ABOUT
+================================ */
+
+.about-page {
+  max-width: var(--container-width);
+  margin: 0 auto;
+}
+
+.about-page > h1 {
+  margin-bottom: 14px;
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+
+.about-page > p {
+  max-width: 850px;
+  margin-bottom: 32px;
+  color: var(--color-gray-dark);
+  font-size: 1.05rem;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.about-card {
+  padding: 24px;
+  background: var(--color-white);
+  border: 3px solid var(--color-black);
+  border-radius: var(--radius-medium);
+  box-shadow: 6px 6px 0 var(--color-black);
+}
+
+.about-card h2 {
+  margin-bottom: 10px;
+  font-size: 1.35rem;
+}
+
+.about-card p {
+  color: var(--color-gray-dark);
+}
+
+@media (min-width: 768px) {
+  .about-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ================================
    EVALUACIÓN
 ================================ */
 
@@ -591,5 +641,28 @@ img {
 
   .evaluation-actions .btn {
     width: 100%;
+  }
+}
+
+/* ================================
+   NAVBAR - MÓVIL
+================================ */
+
+@media (max-width: 600px) {
+  .nav {
+    flex-direction: column;
+    justify-content: center;
+    padding: 14px 0;
+    gap: 12px;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 14px;
+  }
+
+  .nav-links a {
+    font-size: 0.9rem;
   }
 }
