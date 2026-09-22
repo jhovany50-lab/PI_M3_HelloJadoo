@@ -1,14 +1,16 @@
 # Hello Jadoo 💗
 
-Proyecto Integrador - Módulo 3
+## Proyecto Integrador - Módulo 3
 
-Aplicación web tipo SPA que permite interactuar con **Jadoo**, una compañera virtual educativa para estudiantes de secundaria, utilizando inteligencia artificial mediante Google Gemini.
+Hello Jadoo es una aplicación web tipo SPA que permite interactuar con **Jadoo**, una compañera virtual educativa para estudiantes de secundaria.
+
+La aplicación utiliza **Google Gemini** para generar respuestas de manera conversacional y cuenta con una función serverless desplegada en **Vercel**, manteniendo la clave de acceso protegida mediante variables de entorno.
 
 ---
 
 ## 📚 Descripción del proyecto
 
-Hello Jadoo es una aplicación web diseñada para acompañar a estudiantes en sus actividades académicas mediante una conversación natural.
+Hello Jadoo fue desarrollada como una aplicación web orientada a acompañar a estudiantes de secundaria durante sus actividades de aprendizaje.
 
 Jadoo puede:
 
@@ -18,8 +20,9 @@ Jadoo puede:
 - Ayudar con ejercicios de matemáticas.
 - Apoyar la preparación académica.
 - Mantener el contexto de la conversación durante la sesión.
+- Conversar de manera natural sobre diferentes temas.
 
-La aplicación utiliza una arquitectura cliente-servidor y consume la API de Google Gemini desde el backend para mantener segura la clave de acceso.
+La aplicación utiliza una arquitectura SPA para la navegación y una función serverless para comunicarse con Google Gemini sin exponer la clave de API en el frontend.
 
 ---
 
@@ -27,6 +30,8 @@ La aplicación utiliza una arquitectura cliente-servidor y consume la API de Goo
 
 - SPA (Single Page Application).
 - Navegación mediante History API.
+- Navegación sin recargar la página.
+- Soporte para los botones Atrás y Adelante del navegador.
 - Rutas:
   - `/home`
   - `/chat`
@@ -37,8 +42,9 @@ La aplicación utiliza una arquitectura cliente-servidor y consume la API de Goo
 - Manejo de errores de comunicación con la API.
 - Auto-scroll del área de conversación.
 - Diseño responsive.
+- Enfoque mobile-first.
 - Integración con Google Gemini.
-- API desarrollada con Node.js y Express.
+- Función serverless en Vercel.
 - Variables de entorno para información sensible.
 - Pruebas unitarias con Vitest.
 
@@ -57,7 +63,9 @@ Su personalidad está diseñada para ser:
 - Motivadora.
 - Divertida.
 
-Jadoo busca orientar al estudiante y favorecer el aprendizaje, evitando simplemente proporcionar respuestas sin explicación cuando se trata de actividades académicas.
+Jadoo busca acompañar al estudiante durante su aprendizaje.
+
+Cuando el estudiante solicita ayuda con una actividad académica, Jadoo está configurada para orientar el proceso y favorecer la comprensión, en lugar de limitarse a proporcionar una respuesta inmediata.
 
 ---
 
@@ -71,13 +79,20 @@ Jadoo busca orientar al estudiante y favorecer el aprendizaje, evitando simpleme
 - Vite
 - History API
 - Fetch API
+- Flexbox
+- CSS Grid
+- Media Queries
 
-### Backend
+### Inteligencia artificial
+
+- Google Gemini
+- Google GenAI SDK
+
+### Backend y API
 
 - Node.js
 - Express
-- Google Gemini API
-- PostgreSQL
+- Vercel Functions
 
 ### Pruebas
 
@@ -92,6 +107,10 @@ Jadoo busca orientar al estudiante y favorecer el aprendizaje, evitando simpleme
 
 - Vercel
 
+### Entorno local
+
+El proyecto conserva componentes de PostgreSQL utilizados durante el desarrollo y pruebas de funcionalidades académicas.
+
 ---
 
 ## 📁 Estructura del proyecto
@@ -101,6 +120,7 @@ PI_M3_HelloJadoo/
 │
 ├── api/
 │   ├── app.js
+│   ├── chat.js
 │   ├── server.js
 │   └── server-pi-local.js
 │
@@ -125,212 +145,5 @@ PI_M3_HelloJadoo/
 ├── package.json
 ├── package-lock.json
 ├── server.js
+├── vercel.json
 └── vite.config.js
-
-```
-
----
-
-## ⚙️ Instalación local
-
-### 1. Clonar el repositorio
-
-```bash
-git clone https://github.com/jhovany50-lab/PI_M3_HelloJadoo.git
-```
-
-### 2. Entrar al proyecto
-
-```bash
-cd PI_M3_HelloJadoo
-```
-
-### 3. Instalar dependencias
-
-```bash
-npm install
-```
-
----
-
-## 🔐 Variables de entorno
-
-El proyecto utiliza variables de entorno para evitar exponer información sensible.
-
-Crear un archivo:
-
-```text
-.env
-```
-
-a partir de:
-
-```text
-.env.example
-```
-
-Las variables utilizadas son:
-
-```env
-GEMINI_API_KEY=tu_api_key_aqui
-
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=tu_base_de_datos
-DB_USER=tu_usuario
-DB_PASSWORD=tu_contraseña
-```
-
-### Importante
-
-El archivo `.env` **no debe subirse a GitHub**.
-
-El proyecto incluye `.gitignore` para evitar publicar las credenciales.
-
----
-
-## ▶️ Ejecutar el proyecto en desarrollo
-
-### Frontend
-
-```bash
-npm run dev
-```
-
-### Backend
-
-En otra terminal:
-
-```bash
-node api/server-pi-local.js
-```
-
-El backend estará disponible en:
-
-```text
-http://localhost:3000
-```
-
----
-
-## 🧪 Ejecutar las pruebas
-
-Para ejecutar las pruebas unitarias:
-
-```bash
-npm test
-```
-
-Actualmente el proyecto cuenta con pruebas para:
-
-- Normalización de mensajes.
-- Validación de mensajes.
-- Mensajes vacíos.
-- Construcción del historial.
-- Construcción de solicitudes para el chat.
-
----
-
-## 🏗️ Construcción para producción
-
-Para generar la versión de producción:
-
-```bash
-npm run build
-```
-
-Los archivos generados se encuentran en:
-
-```text
-dist/
-```
-
----
-
-## 🤖 Uso de inteligencia artificial
-
-La aplicación utiliza **Google Gemini** como motor de inteligencia artificial para generar las respuestas de Jadoo.
-
-La comunicación con Gemini se realiza desde el backend.
-
-La clave `GEMINI_API_KEY` **no se encuentra en el frontend** y se obtiene mediante variables de entorno.
-
-El backend utiliza un contexto de sistema para definir:
-
-- Personalidad de Jadoo.
-- Público objetivo.
-- Forma de comunicación.
-- Orientación educativa.
-- Manejo del contexto de conversación.
-- Restricciones de seguridad.
-
----
-
-## 🧪 Registro de uso de IA
-
-Durante el desarrollo se utilizó inteligencia artificial como herramienta de apoyo para:
-
-- Análisis de errores.
-- Revisión de código.
-- Diseño de arquitectura.
-- Implementación de funcionalidades.
-- Generación y revisión de pruebas.
-- Integración con Google Gemini.
-- Mejoras de interfaz y experiencia de usuario.
-- Documentación del proyecto.
-
-Las decisiones finales, integración, pruebas y validación del código fueron realizadas durante el desarrollo del proyecto.
-
----
-
-## 📱 Diseño responsive
-
-La aplicación fue desarrollada con enfoque mobile-first y utiliza:
-
-- Flexbox.
-- CSS Grid.
-- Media queries.
-
-Se contempla la revisión de la interfaz en:
-
-- 📱 Dispositivos móviles.
-- 📱 Tablets.
-- 💻 Escritorio.
-
----
-
-## 🚀 Despliegue
-
-El proyecto será desplegado mediante Vercel.
-
-### URL pública
-
-```text
-Pendiente de despliegue
-```
-
----
-
-## 📸 Evidencias
-
-Durante la entrega se incluirán capturas de:
-
-- Página de inicio.
-- Chat con Jadoo.
-- Indicador `escribiendo...`.
-- Página About.
-- Vista responsive móvil.
-- Vista responsive tablet.
-- Vista responsive escritorio.
-- Ejecución de pruebas.
-- Aplicación desplegada.
-
----
-
-## 👨‍💻 Autor
-
-**Jhovany Rodríguez de la Rosa**
-
-Proyecto Integrador - Módulo 3
-
-Hello Jadoo 💗
