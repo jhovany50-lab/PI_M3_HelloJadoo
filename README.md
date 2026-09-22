@@ -2,9 +2,9 @@
 
 ## Proyecto Integrador - Módulo 3
 
-Hello Jadoo es una aplicación web tipo SPA que permite interactuar con **Jadoo**, una compañera virtual educativa para estudiantes de secundaria.
+Hello Jadoo es una aplicación web tipo **SPA (Single Page Application)** que permite interactuar con **Jadoo**, una compañera virtual educativa dirigida principalmente a estudiantes de secundaria.
 
-La aplicación utiliza **Google Gemini** para generar respuestas de manera conversacional y cuenta con una función serverless desplegada en **Vercel**, manteniendo la clave de acceso protegida mediante variables de entorno.
+La aplicación utiliza **Google Gemini** para generar respuestas conversacionales y cuenta con una función **Serverless** desplegada en **Vercel**, manteniendo la clave de acceso protegida mediante variables de entorno.
 
 ---
 
@@ -22,7 +22,9 @@ Jadoo puede:
 - Mantener el contexto de la conversación durante la sesión.
 - Conversar de manera natural sobre diferentes temas.
 
-La aplicación utiliza una arquitectura SPA para la navegación y una función serverless para comunicarse con Google Gemini sin exponer la clave de API en el frontend.
+Cuando el estudiante solicita ayuda con una actividad académica, Jadoo está configurada para orientar el proceso y favorecer la comprensión, en lugar de limitarse a proporcionar una respuesta inmediata.
+
+La aplicación utiliza una arquitectura SPA para la navegación y una función Serverless para comunicarse con Google Gemini sin exponer la clave de API en el frontend.
 
 ---
 
@@ -44,7 +46,7 @@ La aplicación utiliza una arquitectura SPA para la navegación y una función s
 - Diseño responsive.
 - Enfoque mobile-first.
 - Integración con Google Gemini.
-- Función serverless en Vercel.
+- Función Serverless en Vercel.
 - Variables de entorno para información sensible.
 - Pruebas unitarias con Vitest.
 
@@ -65,7 +67,20 @@ Su personalidad está diseñada para ser:
 
 Jadoo busca acompañar al estudiante durante su aprendizaje.
 
-Cuando el estudiante solicita ayuda con una actividad académica, Jadoo está configurada para orientar el proceso y favorecer la comprensión, en lugar de limitarse a proporcionar una respuesta inmediata.
+### Apoyo académico
+
+Cuando el estudiante solicita ayuda con una actividad académica, Jadoo está configurada para:
+
+1. Identificar qué debe resolver el estudiante.
+2. Explicar el concepto necesario.
+3. Hacer preguntas sencillas.
+4. Permitir que el estudiante intente resolver el ejercicio.
+5. Evaluar su respuesta.
+6. Reconocer los avances.
+7. Proporcionar pistas cuando sea necesario.
+8. Permitir nuevos intentos.
+
+El objetivo es favorecer el aprendizaje y la comprensión del procedimiento.
 
 ---
 
@@ -94,6 +109,14 @@ Cuando el estudiante solicita ayuda con una actividad académica, Jadoo está co
 - Express
 - Vercel Functions
 
+### Base de datos y desarrollo
+
+- PostgreSQL
+- pgAdmin
+- node-postgres (`pg`)
+
+Los componentes de PostgreSQL se conservaron como parte del desarrollo y las pruebas de funcionalidades académicas del proyecto.
+
 ### Pruebas
 
 - Vitest
@@ -106,10 +129,6 @@ Cuando el estudiante solicita ayuda con una actividad académica, Jadoo está co
 ### Despliegue
 
 - Vercel
-
-### Entorno local
-
-El proyecto conserva componentes de PostgreSQL utilizados durante el desarrollo y pruebas de funcionalidades académicas.
 
 ---
 
@@ -140,6 +159,11 @@ PI_M3_HelloJadoo/
 ├── tests/
 │   └── prueba.test.js
 │
+├── screenshots/
+│   ├── home.png
+│   ├── chat.png
+│   └── about.png
+│
 ├── .env.example
 ├── .gitignore
 ├── package.json
@@ -147,3 +171,390 @@ PI_M3_HelloJadoo/
 ├── server.js
 ├── vercel.json
 └── vite.config.js
+```
+## 📸 Capturas de pantalla
+
+### 🏠 Inicio
+
+Página principal de Hello Jadoo, donde se presenta a Jadoo y se puede acceder al chat.
+
+![Hello Jadoo - Inicio](screenshots/home.png)
+
+### 💬 Chat
+
+Interfaz de conversación entre el estudiante y Jadoo utilizando Google Gemini.
+
+![Hello Jadoo - Chat](screenshots/chat.png)
+
+### ℹ️ Acerca de
+
+Información sobre Jadoo, sus funciones y la tecnología utilizada en el proyecto.
+
+![Hello Jadoo - Acerca de](screenshots/about.png)
+
+---
+
+## ⚙️ Instalación y ejecución
+
+### Requisitos
+
+Para ejecutar el proyecto localmente se requiere:
+
+- Node.js
+- npm
+- Git
+- Una API Key de Google Gemini
+
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/jhovany50-lab/PI_M3_HelloJadoo.git
+```
+
+### 2. Entrar al proyecto
+
+```bash
+cd PI_M3_HelloJadoo
+```
+
+### 3. Instalar dependencias
+
+```bash
+npm install
+```
+
+### 4. Configurar variables de entorno
+
+Crear un archivo:
+
+```text
+.env
+```
+
+Tomar como referencia el archivo:
+
+```text
+.env.example
+```
+
+Agregar la clave de Google Gemini:
+
+```env
+GEMINI_API_KEY=tu_api_key_aqui
+```
+
+El archivo `.env` contiene información sensible y se encuentra incluido en `.gitignore`.
+
+### 5. Ejecutar el frontend
+
+```bash
+npm run dev
+```
+
+### 6. Ejecutar la API local
+
+En otra terminal:
+
+```bash
+node api/server-pi-local.js
+```
+
+La API estará disponible en:
+
+```text
+http://localhost:3000
+```
+
+### 7. Ejecutar con Vercel Dev
+
+También se puede utilizar el entorno local de Vercel:
+
+```bash
+vercel dev
+```
+
+---
+
+## 🤖 Integración con Google Gemini
+
+Hello Jadoo utiliza **Google Gemini** para generar las respuestas de la compañera virtual.
+
+La comunicación se realiza mediante una función Serverless ubicada en:
+
+```text
+api/chat.js
+```
+
+El frontend realiza una petición:
+
+```text
+POST /api/chat
+```
+
+La petición contiene:
+
+- El mensaje actual del estudiante.
+- El historial de conversación.
+
+La función Serverless recibe la información y utiliza Google Gemini para generar la respuesta.
+
+### Prompt de sistema
+
+Jadoo utiliza un prompt de sistema que define su comportamiento como compañera virtual educativa.
+
+Entre sus principales instrucciones se encuentran:
+
+- Mantener una personalidad alegre, amable y paciente.
+- Conversar de manera natural.
+- No saludar repetidamente.
+- Ayudar al estudiante paso a paso.
+- Favorecer la comprensión antes de proporcionar una respuesta final.
+- Utilizar el historial de conversación.
+- No inventar información académica.
+- Utilizar lenguaje apropiado para estudiantes de secundaria.
+- Apoyar ejercicios y preparación académica.
+
+### Historial de conversación
+
+El historial se mantiene durante la sesión.
+
+Esto permite que Jadoo pueda interpretar respuestas breves utilizando el contexto anterior.
+
+Por ejemplo:
+
+```text
+Estudiante: ¿Cuánto es 3 + 2?
+
+Jadoo: ¿Cuánto crees que es?
+
+Estudiante: 5
+```
+
+Jadoo puede interpretar el mensaje `5` utilizando el contexto de la conversación.
+
+---
+
+## 💬 Experiencia de chat
+
+La interfaz diferencia visualmente los mensajes del estudiante y los mensajes de Jadoo.
+
+Durante la espera de la respuesta de Gemini se muestra el indicador:
+
+```text
+escribiendo...
+```
+
+También se implementaron:
+
+- Limpieza del campo de entrada después de enviar.
+- Auto-scroll de la conversación.
+- Manejo de errores de comunicación.
+- Validación de mensajes vacíos.
+- Historial de conversación durante la sesión.
+
+---
+
+## 🧭 Navegación SPA
+
+Hello Jadoo utiliza **History API** para realizar la navegación sin recargar la página.
+
+Las rutas principales son:
+
+```text
+/home
+/chat
+/about
+```
+
+La navegación utiliza:
+
+```javascript
+history.pushState()
+```
+
+y:
+
+```javascript
+popstate
+```
+
+Esto permite utilizar los botones **Atrás** y **Adelante** del navegador.
+
+---
+
+## 📱 Diseño responsive
+
+El proyecto utiliza un enfoque **mobile-first**.
+
+Se implementaron:
+
+- Flexbox.
+- CSS Grid.
+- Media Queries.
+- Diseño adaptable para diferentes tamaños de pantalla.
+- Navegación adaptable en dispositivos pequeños.
+
+La interfaz fue revisada en diferentes tamaños de pantalla para comprobar la adaptación del contenido.
+
+---
+
+## 🧪 Pruebas unitarias
+
+El proyecto utiliza **Vitest** para las pruebas unitarias.
+
+Para ejecutar las pruebas:
+
+```bash
+npm test -- --run
+```
+
+Actualmente se incluyen pruebas para:
+
+- Normalización de mensajes.
+- Validación de mensajes.
+- Rechazo de mensajes vacíos.
+- Manejo del historial de conversación.
+- Construcción de la petición del chat.
+
+Resultado actual:
+
+```text
+Test Files  1 passed
+Tests       5 passed
+```
+
+---
+
+## 🏗️ Build del proyecto
+
+Para generar la versión de producción:
+
+```bash
+npm run build
+```
+
+La compilación genera la carpeta:
+
+```text
+dist/
+```
+
+Esta carpeta se encuentra incluida en `.gitignore`.
+
+---
+
+## 🔐 Seguridad
+
+La clave de Google Gemini no se encuentra en el frontend.
+
+La aplicación utiliza:
+
+```text
+GEMINI_API_KEY
+```
+
+como variable de entorno.
+
+El archivo:
+
+```text
+.env
+```
+
+se encuentra incluido en `.gitignore`.
+
+Para el repositorio se proporciona:
+
+```text
+.env.example
+```
+
+sin valores reales.
+
+De esta manera, la clave de API no se publica dentro del código fuente del frontend ni en el repositorio.
+
+---
+
+## ☁️ Despliegue en Vercel
+
+El proyecto está desplegado en Vercel.
+
+### Aplicación pública
+
+https://pi-m3-hello-jadoo-p1wr.vercel.app
+
+### Función Serverless
+
+La función utilizada para la comunicación con Gemini es:
+
+```text
+/api/chat
+```
+
+La aplicación se conecta con Google Gemini desde el backend Serverless, evitando exponer la clave de API en el navegador.
+
+---
+
+## 📝 Registro del uso de Inteligencia Artificial
+
+Durante el desarrollo del proyecto se utilizó Inteligencia Artificial como herramienta de apoyo para:
+
+- Analizar los requisitos del Proyecto Integrador.
+- Revisar la arquitectura del proyecto.
+- Apoyar la implementación de la navegación SPA.
+- Diseñar y mejorar la experiencia conversacional de Jadoo.
+- Elaborar y ajustar el prompt de sistema utilizado por Gemini.
+- Revisar la integración entre frontend, API y Gemini.
+- Apoyar la implementación de funciones Serverless.
+- Revisar errores de código.
+- Crear y revisar pruebas unitarias.
+- Mejorar el diseño responsive.
+- Revisar y mejorar la documentación del proyecto.
+
+La implementación, integración, pruebas y configuración final del proyecto forman parte del proceso de desarrollo realizado para el Proyecto Integrador.
+
+---
+
+## 📌 Estado del proyecto
+
+Proyecto Integrador - Módulo 3:
+
+- ✅ Aplicación SPA.
+- ✅ Navegación `/home`, `/chat` y `/about`.
+- ✅ History API.
+- ✅ Chat con Gemini.
+- ✅ Historial conversacional.
+- ✅ Estado `escribiendo...`.
+- ✅ Manejo de errores.
+- ✅ Función Serverless.
+- ✅ API Key protegida mediante variables de entorno.
+- ✅ Diseño responsive.
+- ✅ Enfoque mobile-first.
+- ✅ Pruebas unitarias con Vitest.
+- ✅ Build de producción.
+- ✅ Repositorio GitHub.
+- ✅ Despliegue en Vercel.
+- ✅ Documentación.
+- ✅ Capturas de pantalla.
+
+---
+
+## 🔗 Enlaces del proyecto
+
+### GitHub
+
+https://github.com/jhovany50-lab/PI_M3_HelloJadoo
+
+### Aplicación desplegada
+
+https://pi-m3-hello-jadoo-p1wr.vercel.app
+
+---
+
+## 👨‍💻 Autor
+
+**Jhovany Rodríguez**
+
+Proyecto Integrador - Módulo 3
+
+**Hello Jadoo 💗**
