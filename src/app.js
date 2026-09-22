@@ -166,5 +166,9 @@ document.addEventListener("click", (event) => {
 // Atrás y Adelante del navegador
 window.addEventListener("popstate", renderRoute);
 
+if (window.location.pathname === "/") {
+  window.history.replaceState({}, "", "/home");
+}
+
 // Render inicial
 renderRoute();
