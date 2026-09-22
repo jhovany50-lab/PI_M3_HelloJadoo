@@ -1,0 +1,23 @@
+{
+  "name": "pi-m3-hello-jadoo",
+  "version": "1.0.0",
+  "description": "Proyecto Integrador Módulo 3 - Chat con Hello Jadoo usando Gemini AI",
+  "type": "module",
+  "scripts": {
+  "dev": "vite",
+  "build": "vite build",
+  "api": "node api/server.js",
+  "test": "vitest"
+  },
+  "devDependencies": {
+    "vite": "^8.2.2",
+    "vitest": "^5.0.0"
+  },
+  "dependencies": {
+    "@google/genai": "^2.21.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "pg": "^8.23.0"
+  }
+}

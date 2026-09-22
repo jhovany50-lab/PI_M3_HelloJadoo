@@ -1,0 +1,595 @@
+:root {
+  --color-pink: #ff4f9a;
+  --color-yellow: #ffd84d;
+  --color-lime: #b7e84b;
+  --color-black: #171717;
+  --color-white: #ffffff;
+  --color-gray: #f5f5f5;
+  --color-gray-dark: #666666;
+
+  --font-main: "Arial", sans-serif;
+
+  --radius-small: 10px;
+  --radius-medium: 18px;
+  --radius-large: 28px;
+
+  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+  --container-width: 1100px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-main);
+  background: var(--color-white);
+  color: var(--color-black);
+  line-height: 1.6;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.container {
+  width: min(100% - 32px, var(--container-width));
+  margin-inline: auto;
+}
+
+.page {
+  min-height: calc(100vh - 140px);
+  padding: 40px 0;
+}
+
+.header {
+  background: var(--color-black);
+  color: var(--color-white);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.logo-hello {
+  color: var(--color-white);
+}
+
+.logo-jadoo {
+  color: var(--color-pink);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.nav-links a {
+  font-size: 0.95rem;
+  font-weight: 700;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: var(--color-yellow);
+}
+
+/* ================================
+   HOME
+================================ */
+
+.home {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: 40px;
+  min-height: calc(100vh - 140px);
+}
+
+.home-content {
+  max-width: 600px;
+}
+
+.home-badge {
+  display: inline-block;
+  margin-bottom: 14px;
+  padding: 8px 16px;
+  background: var(--color-yellow);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.home h1 {
+  margin-bottom: 18px;
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  line-height: 1.05;
+}
+
+.home h1 span {
+  display: block;
+  color: var(--color-pink);
+}
+
+.home-description {
+  max-width: 520px;
+  margin-bottom: 28px;
+  color: var(--color-gray-dark);
+  font-size: 1.1rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 24px;
+  border-radius: 999px;
+  font-weight: 800;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.btn-primary {
+  background: var(--color-pink);
+  color: var(--color-white);
+  box-shadow: 0 8px 20px rgba(255, 79, 154, 0.25);
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+}
+
+.home-character {
+  display: flex;
+  justify-content: center;
+}
+
+.character-card {
+  width: min(100%, 300px);
+  min-height: 300px;
+  padding: 30px;
+  border: 4px solid var(--color-black);
+  border-radius: var(--radius-large);
+  background: var(--color-yellow);
+  box-shadow: 12px 12px 0 var(--color-black);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  text-align: center;
+}
+
+.character-emoji {
+  font-size: 7rem;
+  line-height: 1;
+}
+
+.character-card strong {
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+}
+
+.character-card span:last-child {
+  color: var(--color-black);
+  font-weight: 700;
+}
+
+/* ================================
+   HOME - TABLET Y ESCRITORIO
+================================ */
+
+@media (min-width: 768px) {
+  .home {
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 70px;
+  }
+
+  .home-character {
+    justify-content: center;
+  }
+}
+
+/* ================================
+   CHAT
+================================ */
+
+.chat-page {
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.chat-badge {
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 7px 14px;
+  background: var(--color-lime);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.chat-header h1 {
+  margin-bottom: 6px;
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+}
+
+.chat-header p {
+  color: var(--color-gray-dark);
+}
+
+.chat-avatar {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--color-yellow);
+  border: 3px solid var(--color-black);
+  border-radius: 50%;
+
+  font-size: 2.5rem;
+
+  box-shadow: 5px 5px 0 var(--color-black);
+}
+
+.chat-box {
+  overflow: hidden;
+
+  background: var(--color-gray);
+  border: 3px solid var(--color-black);
+  border-radius: var(--radius-large);
+
+  box-shadow: 8px 8px 0 var(--color-black);
+}
+
+.messages {
+  min-height: 420px;
+  max-height: 500px;
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  padding: 24px;
+  background: var(--color-white);
+}
+
+.message {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  max-width: 80%;
+}
+
+.message-avatar {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--color-yellow);
+  border-radius: 50%;
+  border: 2px solid var(--color-black);
+}
+
+.message-content {
+  padding: 12px 16px;
+  border-radius: 18px;
+}
+
+.message-name {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.message-content p {
+  margin: 0;
+}
+
+.message-jadoo .message-content {
+  background: var(--color-yellow);
+  border-bottom-left-radius: 5px;
+}
+
+.chat-form {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+
+  background: var(--color-gray);
+}
+
+.chat-form input {
+  flex: 1;
+  min-width: 0;
+
+  padding: 14px 18px;
+
+  border: 2px solid transparent;
+  border-radius: 999px;
+
+  background: var(--color-white);
+  outline: none;
+
+  transition: border-color 0.2s ease;
+}
+
+.chat-form input:focus {
+  border-color: var(--color-pink);
+}
+
+.chat-form .btn {
+  border: none;
+  white-space: nowrap;
+}
+
+/* ================================
+   EVALUACIÓN
+================================ */
+
+.evaluation-page {
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.evaluation-header {
+  margin-bottom: 28px;
+}
+
+.evaluation-header h1 {
+  margin-bottom: 8px;
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+
+.evaluation-header p {
+  color: var(--color-gray-dark);
+  font-size: 1.05rem;
+}
+
+.evaluation-container {
+  width: 100%;
+}
+
+.evaluation-card {
+  padding: 28px;
+
+  background: var(--color-white);
+  border: 3px solid var(--color-black);
+  border-radius: var(--radius-large);
+
+  box-shadow: 8px 8px 0 var(--color-black);
+}
+
+.evaluation-progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  margin-bottom: 24px;
+
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.evaluation-progress-bar {
+  flex: 1;
+  height: 12px;
+
+  overflow: hidden;
+
+  background: var(--color-gray);
+  border: 2px solid var(--color-black);
+  border-radius: 999px;
+}
+
+.evaluation-progress-fill {
+  width: 20%;
+  height: 100%;
+
+  background: var(--color-lime);
+
+  transition: width 0.3s ease;
+}
+
+.evaluation-topic {
+  display: inline-block;
+
+  margin-bottom: 14px;
+  padding: 6px 12px;
+
+  background: var(--color-yellow);
+  border-radius: 999px;
+
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.evaluation-question {
+  margin-bottom: 24px;
+
+  font-size: 1.35rem;
+  line-height: 1.5;
+}
+
+.evaluation-answer {
+  width: 100%;
+
+  padding: 16px 18px;
+
+  border: 2px solid var(--color-black);
+  border-radius: var(--radius-medium);
+
+  background: var(--color-gray);
+
+  outline: none;
+
+  transition: border-color 0.2s ease,
+              background 0.2s ease;
+}
+
+.evaluation-answer:focus {
+  border-color: var(--color-pink);
+  background: var(--color-white);
+}
+
+.evaluation-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  margin-top: 20px;
+}
+
+.evaluation-actions .btn {
+  border: none;
+}
+
+.evaluation-loading {
+  padding: 40px;
+
+  text-align: center;
+
+  background: var(--color-gray);
+  border: 3px solid var(--color-black);
+  border-radius: var(--radius-large);
+}
+
+.evaluation-error {
+  padding: 24px;
+
+  background: #fff0f6;
+  border: 3px solid var(--color-pink);
+  border-radius: var(--radius-medium);
+
+  text-align: center;
+}
+
+.evaluation-error p {
+  margin-bottom: 16px;
+}
+
+.evaluation-feedback {
+  margin-top: 20px;
+  padding: 16px;
+
+  border-radius: var(--radius-medium);
+
+  font-weight: 700;
+}
+
+.evaluation-feedback.correct {
+  background: var(--color-lime);
+}
+
+.evaluation-feedback.incorrect {
+  background: var(--color-yellow);
+}
+
+.evaluation-finish {
+  padding: 32px;
+
+  text-align: center;
+
+  background: var(--color-yellow);
+  border: 3px solid var(--color-black);
+  border-radius: var(--radius-large);
+
+  box-shadow: 8px 8px 0 var(--color-black);
+}
+
+.evaluation-finish h2 {
+  margin-bottom: 12px;
+  font-size: 2rem;
+}
+
+.evaluation-score {
+  margin: 20px 0;
+
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--color-pink);
+}
+
+@media (max-width: 600px) {
+  .evaluation-card {
+    padding: 20px;
+  }
+
+  .evaluation-question {
+    font-size: 1.15rem;
+  }
+
+  .evaluation-progress {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .evaluation-actions {
+    justify-content: stretch;
+  }
+
+  .evaluation-actions .btn {
+    width: 100%;
+  }
+}
