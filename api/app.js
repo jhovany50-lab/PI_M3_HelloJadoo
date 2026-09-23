@@ -32,7 +32,7 @@ app.get("/", (req, res) => {
   });
 });
 
-app.post("/api/chat", async (req, res) => {
+app.post("/api/functions", async (req, res) => {
   try {
     const {
       message,

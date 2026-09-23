@@ -46,7 +46,7 @@ export function initChat() {
     showTypingIndicator();
 
     try {
-      const response = await fetch("/api/chat", {
+      const response = await fetch("/api/functions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
