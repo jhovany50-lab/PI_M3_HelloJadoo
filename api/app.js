@@ -34,7 +34,11 @@ app.get("/", (req, res) => {
 
 app.post("/api/chat", async (req, res) => {
   try {
-    const { message, history = [] } = req.body;
+    const {
+      message,
+      history = [],
+      userProfile = null
+    } = req.body;
 
     if (!message || !message.trim()) {
       return res.status(400).json({
@@ -106,7 +110,51 @@ ${JSON.stringify(results, null, 2)}
     // 3. INSTRUCCIONES DE JADOO
     // ==========================================
 
+let personalizationInstructions = "";
+
+if (userProfile?.gender === "female") {
+  personalizationInstructions = `
+PERSONALIZACIÓN DEL ESTUDIANTE:
+
+La estudiante prefiere que te dirijas a ella utilizando
+formas femeninas cuando sea necesario.
+
+${userProfile.name
+  ? `Su nombre es ${userProfile.name}. Puedes utilizar su nombre de forma natural durante la conversación.`
+  : "No se proporcionó un nombre."}
+`;
+}
+
+if (userProfile?.gender === "male") {
+  personalizationInstructions = `
+PERSONALIZACIÓN DEL ESTUDIANTE:
+
+El estudiante prefiere que te dirijas a él utilizando
+formas masculinas cuando sea necesario.
+
+${userProfile.name
+  ? `Su nombre es ${userProfile.name}. Puedes utilizar su nombre de forma natural durante la conversación.`
+  : "No se proporcionó un nombre."}
+`;
+}
+
+if (userProfile?.gender === "neutral") {
+  personalizationInstructions = `
+PERSONALIZACIÓN DEL ESTUDIANTE:
+
+El estudiante prefiere un lenguaje neutral.
+
+No asumas género y evita utilizar formas masculinas o femeninas
+para referirte al estudiante.
+
+${userProfile.name
+  ? `Su nombre es ${userProfile.name}. Puedes utilizar su nombre de forma natural durante la conversación.`
+  : "No se proporcionó un nombre."}
+`;
+}
+
     const systemInstructions = `
+
 Eres Jadoo, una compañera virtual para estudiantes de secundaria.
 
 PERSONALIDAD:
@@ -129,9 +177,9 @@ Solo saluda cuando el estudiante esté saludando.
 Si el estudiante hace una pregunta directa, responde directamente.
 
 No repitas constantemente frases como:
-"¡Hola, Sofía!"
+"¡Hola!"
 "Qué gusto saludarte."
-"Hola, Sofía."
+"Hola."
 
 MEMORIA ACADÉMICA:
 
@@ -255,6 +303,12 @@ INFORMACIÓN ACADÉMICA DISPONIBLE:
 ${academicContext}
 `;
 
+const finalSystemInstructions = `
+${systemInstructions}
+
+${personalizationInstructions}
+`;
+
     // ==========================================
     // 4. CONSTRUIR LA CONVERSACIÓN PARA GEMINI
     // ==========================================
@@ -266,7 +320,7 @@ ${academicContext}
         parts: [
           {
             text: `
-${systemInstructions}
+${finalSystemInstructions}
 
 MENSAJE ACTUAL DEL ESTUDIANTE:
 ${message}

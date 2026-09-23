@@ -1,4 +1,7 @@
+import { getUserProfile } from "./welcome.js";
+
 export function initChat() {
+  const userProfile = getUserProfile();
   const chatForm = document.getElementById("chat-form");
   const messageInput = document.getElementById("message-input");
   const messagesContainer = document.getElementById("messages");
@@ -42,7 +45,8 @@ export function initChat() {
         },
         body: JSON.stringify({
           message: message,
-          history: conversationHistory
+          history: conversationHistory,
+          userProfile
         })
       });
 
@@ -86,7 +90,7 @@ export function initChat() {
 
     const name = document.createElement("span");
     name.className = "message-name";
-    name.textContent = "Tú";
+    name.textContent = userProfile?.name || "Tú";
 
     const text = document.createElement("p");
     text.textContent = message;

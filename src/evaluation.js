@@ -703,7 +703,7 @@ export function initEvaluation() {
         </h2>
 
         <p>
-          Vamos a trabajar juntas en:
+          Vamos a trabajar en:
           <strong>${name}</strong>
         </p>
 

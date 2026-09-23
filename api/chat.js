@@ -20,7 +20,13 @@ export default async function handler(req, res) {
     // 2. RECIBIR DATOS DEL FRONTEND
     // ==========================================
 
-    const { message, history = [] } = req.body;
+    const {
+      message,
+      history = [],
+      userProfile = null
+    } = req.body;
+
+    console.log("PERFIL RECIBIDO:", userProfile);
 
     if (!message || !message.trim()) {
       return res.status(400).json({
@@ -57,6 +63,48 @@ export default async function handler(req, res) {
     // ==========================================
     // 4. INSTRUCCIONES DE JADOO
     // ==========================================
+let personalizationInstructions = "";
+
+if (userProfile?.gender === "female") {
+  personalizationInstructions = `
+PERSONALIZACIÓN DEL ESTUDIANTE:
+
+La estudiante prefiere que te dirijas a ella utilizando
+formas femeninas cuando sea necesario.
+
+${userProfile.name
+  ? `Su nombre es ${userProfile.name}. Puedes utilizar su nombre de forma natural durante la conversación.`
+  : "No se proporcionó un nombre."}
+`;
+}
+
+if (userProfile?.gender === "male") {
+  personalizationInstructions = `
+PERSONALIZACIÓN DEL ESTUDIANTE:
+
+El estudiante prefiere que te dirijas a él utilizando
+formas masculinas cuando sea necesario.
+
+${userProfile.name
+  ? `Su nombre es ${userProfile.name}. Puedes utilizar su nombre de forma natural durante la conversación.`
+  : "No se proporcionó un nombre."}
+`;
+}
+
+if (userProfile?.gender === "neutral") {
+  personalizationInstructions = `
+PERSONALIZACIÓN DEL ESTUDIANTE:
+
+El estudiante prefiere un lenguaje neutral.
+
+No asumas género y evita utilizar formas masculinas o femeninas
+para referirte al estudiante.
+
+${userProfile.name
+  ? `Su nombre es ${userProfile.name}. Puedes utilizar su nombre de forma natural durante la conversación.`
+  : "No se proporcionó un nombre."}
+`;
+}
 
     const systemInstructions = `
 Eres Jadoo, una compañera virtual para estudiantes de secundaria.
@@ -174,22 +222,24 @@ recomienda hablar con un adulto de confianza.
     // ==========================================
 
     const contents = [
-      ...conversationHistory,
+  ...conversationHistory,
+  {
+    role: "user",
+    parts: [
       {
-        role: "user",
-        parts: [
-          {
-            text: `
+        text: `
 ${systemInstructions}
+
+${personalizationInstructions}
 
 MENSAJE ACTUAL DEL ESTUDIANTE:
 
 ${message}
 `
-          }
-        ]
       }
-    ];
+    ]
+  }
+];
 
     // ==========================================
     // 6. ENVIAR A GEMINI

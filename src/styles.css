@@ -18,6 +18,31 @@
   --container-width: 1100px;
 }
 
+/* ==========================================
+   TEMAS PERSONALIZADOS DE JADOO
+   ========================================== */
+
+/* Tema femenino */
+body.jadoo-theme-female {
+  --color-pink: #ff4f9a;
+  --color-yellow: #ffd84d;
+  --color-lime: #b7e84b;
+}
+
+/* Tema masculino */
+body.jadoo-theme-male {
+  --color-pink: #3b82f6;
+  --color-yellow: #ffd84d;
+  --color-lime: #22c55e;
+}
+
+/* Tema neutral */
+body.jadoo-theme-neutral {
+  --color-pink: #8b5cf6;
+  --color-yellow: #facc15;
+  --color-lime: #2dd4bf;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -181,6 +206,7 @@ img {
 }
 
 .home-character {
+  position: relative;
   display: flex;
   justify-content: center;
 }
@@ -664,5 +690,602 @@ img {
 
   .nav-links a {
     font-size: 0.9rem;
+  }
+}
+
+/* ==========================================
+   PANTALLA DE PERSONALIZACIÓN
+   ========================================== */
+
+.welcome-page {
+  min-height: calc(100vh - 80px);
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: 40px;
+  max-width: var(--container-width);
+  margin: 0 auto;
+}
+
+.welcome-content {
+  max-width: 650px;
+}
+
+.welcome-content h1 {
+  margin: 18px 0;
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  line-height: 1.05;
+}
+
+.welcome-content h1 span {
+  display: block;
+  color: var(--color-pink);
+}
+
+.welcome-description {
+  margin-bottom: 30px;
+  color: var(--color-gray-dark);
+  font-size: 1.1rem;
+}
+
+.welcome-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 600px;
+}
+
+.welcome-form fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.welcome-form legend {
+  margin-bottom: 14px;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.welcome-options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.welcome-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  background: var(--color-white);
+  border: 3px solid var(--color-black);
+  border-radius: var(--radius-medium);
+  box-shadow: 5px 5px 0 var(--color-black);
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.welcome-option:hover {
+  transform: translateY(-2px);
+  box-shadow: 7px 7px 0 var(--color-black);
+}
+
+.welcome-option input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-pink);
+}
+
+.welcome-option span {
+  font-weight: 700;
+}
+
+.welcome-name {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.welcome-name small {
+  font-weight: 400;
+  color: var(--color-gray-dark);
+}
+
+.welcome-name input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 3px solid var(--color-black);
+  border-radius: var(--radius-medium);
+  font: inherit;
+  outline: none;
+}
+
+.welcome-name input:focus {
+  border-color: var(--color-pink);
+}
+
+.welcome-form .btn {
+  align-self: flex-start;
+}
+
+/* ==========================================
+   TABLET / DESKTOP
+   ========================================== */
+
+@media (min-width: 768px) {
+  .welcome-page {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+
+  .welcome-options {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* =========================================================
+   TEMAS PERSONALIZADOS DE JADOO
+   ========================================================= */
+
+/* Tema femenino */
+body.jadoo-theme-female {
+  --theme-primary: #ff4f9a;
+  --theme-secondary: #ffd84d;
+  --theme-accent: #ff8fc4;
+  --theme-soft: #fff0f7;
+  --theme-card: #fff7fb;
+  --theme-text: #171717;
+
+  --theme-radius: 28px;
+  --theme-shadow: 8px 8px 0 #171717;
+}
+
+/* Tema masculino */
+body.jadoo-theme-male {
+  --theme-primary: #3f82f1;
+  --theme-secondary: #ffd84d;
+  --theme-accent: #63b3ff;
+  --theme-soft: #eef6ff;
+  --theme-card: #f7fbff;
+  --theme-text: #171717;
+
+  --theme-radius: 18px;
+  --theme-shadow: 8px 8px 0 #171717;
+}
+
+/* Tema neutral */
+body.jadoo-theme-neutral {
+  --theme-primary: #7c4dff;
+  --theme-secondary: #b7e84b;
+  --theme-accent: #a78bfa;
+  --theme-soft: #f4f0ff;
+  --theme-card: #faf8ff;
+  --theme-text: #171717;
+
+  --theme-radius: 22px;
+  --theme-shadow: 8px 8px 0 #171717;
+}
+
+
+/* =========================================================
+   APLICACIÓN GENERAL DEL TEMA
+   ========================================================= */
+
+body.jadoo-theme-female,
+body.jadoo-theme-male,
+body.jadoo-theme-neutral {
+  color: var(--theme-text);
+}
+
+
+/* =========================================================
+   NAVEGACIÓN
+   ========================================================= */
+
+body.jadoo-theme-female .logo span {
+  color: var(--theme-primary);
+}
+
+body.jadoo-theme-male .logo span {
+  color: var(--theme-primary);
+}
+
+body.jadoo-theme-neutral .logo span {
+  color: var(--theme-primary);
+}
+
+
+/* =========================================================
+   TÍTULOS PRINCIPALES
+   ========================================================= */
+
+body.jadoo-theme-female .home h1 span,
+body.jadoo-theme-female .welcome-page h1 span {
+  color: var(--theme-primary);
+}
+
+body.jadoo-theme-male .home h1 span,
+body.jadoo-theme-male .welcome-page h1 span {
+  color: var(--theme-primary);
+}
+
+body.jadoo-theme-neutral .home h1 span,
+body.jadoo-theme-neutral .welcome-page h1 span {
+  color: var(--theme-primary);
+}
+
+
+/* =========================================================
+   BOTONES
+   ========================================================= */
+
+body.jadoo-theme-female .btn-primary {
+  background: var(--theme-primary);
+  border-color: var(--theme-primary);
+}
+
+body.jadoo-theme-male .btn-primary {
+  background: var(--theme-primary);
+  border-color: var(--theme-primary);
+}
+
+body.jadoo-theme-neutral .btn-primary {
+  background: var(--theme-primary);
+  border-color: var(--theme-primary);
+}
+
+
+/* =========================================================
+   TARJETA DE JADOO
+   ========================================================= */
+
+body.jadoo-theme-female .character-card {
+  background: var(--theme-secondary);
+  border-radius: var(--theme-radius);
+  box-shadow: var(--theme-shadow);
+}
+
+body.jadoo-theme-male .character-card {
+  background: var(--theme-secondary);
+  border-radius: var(--theme-radius);
+  box-shadow: var(--theme-shadow);
+}
+
+body.jadoo-theme-neutral .character-card {
+  background: var(--theme-secondary);
+  border-radius: var(--theme-radius);
+  box-shadow: var(--theme-shadow);
+}
+
+
+/* =========================================================
+   CHAT
+   ========================================================= */
+
+body.jadoo-theme-female .chat-box,
+body.jadoo-theme-male .chat-box,
+body.jadoo-theme-neutral .chat-box {
+  border-radius: var(--theme-radius);
+  box-shadow: var(--theme-shadow);
+}
+
+body.jadoo-theme-female .message-jadoo .message-content {
+  background: var(--theme-secondary);
+}
+
+body.jadoo-theme-male .message-jadoo .message-content {
+  background: var(--theme-secondary);
+}
+
+body.jadoo-theme-neutral .message-jadoo .message-content {
+  background: var(--theme-secondary);
+}
+
+
+/* =========================================================
+   INPUT DEL CHAT
+   ========================================================= */
+
+body.jadoo-theme-female .chat-form input:focus {
+  border-color: var(--theme-primary);
+}
+
+body.jadoo-theme-male .chat-form input:focus {
+  border-color: var(--theme-primary);
+}
+
+body.jadoo-theme-neutral .chat-form input:focus {
+  border-color: var(--theme-primary);
+}
+
+
+/* =========================================================
+   TARJETAS DE ABOUT
+   ========================================================= */
+
+body.jadoo-theme-female .about-card,
+body.jadoo-theme-male .about-card,
+body.jadoo-theme-neutral .about-card {
+  border-radius: var(--theme-radius);
+  background: var(--theme-card);
+  box-shadow: var(--theme-shadow);
+}
+
+body.jadoo-theme-female .about-card h2 {
+  color: var(--theme-primary);
+}
+
+body.jadoo-theme-male .about-card h2 {
+  color: var(--theme-primary);
+}
+
+body.jadoo-theme-neutral .about-card h2 {
+  color: var(--theme-primary);
+}
+
+/* =========================================================
+   HOME - PERSONALIDAD VISUAL
+   ========================================================= */
+
+/* ---------- FEMENINO ---------- */
+
+body.jadoo-theme-female .home-badge {
+  background: var(--theme-soft);
+  color: var(--theme-primary);
+  border-color: var(--theme-primary);
+}
+
+body.jadoo-theme-female .home-character::before {
+  content: "✨";
+  position: absolute;
+  top: -20px;
+  right: 12%;
+  font-size: 2rem;
+}
+
+body.jadoo-theme-female .home-character::after {
+  content: "💗";
+  position: absolute;
+  bottom: 5%;
+  left: 8%;
+  font-size: 1.8rem;
+}
+
+
+/* ---------- MASCULINO ---------- */
+
+body.jadoo-theme-male .home-badge {
+  background: var(--theme-soft);
+  color: var(--theme-primary);
+  border-color: var(--theme-primary);
+}
+
+body.jadoo-theme-male .home-character::before {
+  content: "⚡";
+  position: absolute;
+  top: -20px;
+  right: 12%;
+  font-size: 2rem;
+}
+
+body.jadoo-theme-male .home-character::after {
+  content: "🚀";
+  position: absolute;
+  bottom: 5%;
+  left: 8%;
+  font-size: 1.8rem;
+}
+
+
+/* ---------- NEUTRAL ---------- */
+
+body.jadoo-theme-neutral .home-badge {
+  background: var(--theme-soft);
+  color: var(--theme-primary);
+  border-color: var(--theme-primary);
+}
+
+body.jadoo-theme-neutral .home-character::before {
+  content: "✨";
+  position: absolute;
+  top: -20px;
+  right: 12%;
+  font-size: 2rem;
+}
+
+body.jadoo-theme-neutral .home-character::after {
+  content: "🧠";
+  position: absolute;
+  bottom: 5%;
+  left: 8%;
+  font-size: 1.8rem;
+}
+
+/* =========================================================
+   CHAT - PERSONALIDAD VISUAL
+   ========================================================= */
+
+/* Tema femenino */
+body.jadoo-theme-female .chat-page h1 {
+  color: var(--theme-primary);
+}
+
+body.jadoo-theme-female .message-jadoo .message-content {
+  background: var(--theme-secondary);
+  border-radius: 20px 20px 20px 6px;
+}
+
+body.jadoo-theme-female .message-user .message-content {
+  background: var(--theme-soft);
+  border-color: var(--theme-primary);
+  border-radius: 20px 20px 6px 20px;
+}
+
+body.jadoo-theme-female .chat-form button {
+  background: var(--theme-primary);
+}
+
+body.jadoo-theme-female .chat-avatar {
+  border-color: var(--theme-primary);
+}
+
+
+/* Tema masculino */
+body.jadoo-theme-male .chat-page h1 {
+  color: var(--theme-primary);
+}
+
+body.jadoo-theme-male .message-jadoo .message-content {
+  background: var(--theme-secondary);
+  border-radius: 14px 14px 14px 4px;
+}
+
+body.jadoo-theme-male .message-user .message-content {
+  background: var(--theme-soft);
+  border-color: var(--theme-primary);
+  border-radius: 14px 14px 4px 14px;
+}
+
+body.jadoo-theme-male .chat-form button {
+  background: var(--theme-primary);
+}
+
+body.jadoo-theme-male .chat-avatar {
+  border-color: var(--theme-primary);
+}
+
+
+/* Tema neutral */
+body.jadoo-theme-neutral .chat-page h1 {
+  color: var(--theme-primary);
+}
+
+body.jadoo-theme-neutral .message-jadoo .message-content {
+  background: var(--theme-secondary);
+  border-radius: 18px 18px 18px 6px;
+}
+
+body.jadoo-theme-neutral .message-user .message-content {
+  background: var(--theme-soft);
+  border-color: var(--theme-primary);
+  border-radius: 18px 18px 6px 18px;
+}
+
+body.jadoo-theme-neutral .chat-form button {
+  background: var(--theme-primary);
+}
+
+body.jadoo-theme-neutral .chat-avatar {
+  border-color: var(--theme-primary);
+}
+
+/* =========================================================
+   PANTALLA DE ENTRADA - HELLO JADOO
+   ========================================================= */
+
+.jadoo-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #171717;
+
+  animation: jadooSplashOut 0.6s ease 2.4s forwards;
+}
+
+.jadoo-splash-content {
+  text-align: center;
+  color: #ffffff;
+
+  animation: jadooSplashIn 0.8s ease forwards;
+}
+
+.jadoo-splash-avatar {
+  width: 110px;
+  height: 110px;
+
+  margin: 0 auto 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #ffd84d;
+
+  border: 4px solid #ffffff;
+  border-radius: 50%;
+
+  font-size: 4rem;
+
+  box-shadow: 8px 8px 0 #000000;
+}
+
+.jadoo-splash-content h1 {
+  margin: 0 0 10px;
+
+  font-size: clamp(2.2rem, 7vw, 4rem);
+  font-weight: 800;
+
+  color: #ff4f9a;
+}
+
+.jadoo-splash-content p {
+  margin: 0;
+
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+
+/* Entrada */
+@keyframes jadooSplashIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.75);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+/* Salida */
+@keyframes jadooSplashOut {
+  0% {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  100% {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+
+/* Accesibilidad: reducir movimiento */
+@media (prefers-reduced-motion: reduce) {
+  .jadoo-splash,
+  .jadoo-splash-content {
+    animation: none;
+  }
+
+  .jadoo-splash {
+    display: none;
   }
 }
