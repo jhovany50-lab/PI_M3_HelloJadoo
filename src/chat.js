@@ -1,5 +1,7 @@
 import { getUserProfile } from "./welcome.js";
 
+const CHAT_HISTORY_KEY = "jadooConversationHistory";
+
 export function initChat() {
   const userProfile = getUserProfile();
   const chatForm = document.getElementById("chat-form");
@@ -10,8 +12,11 @@ export function initChat() {
     return;
   }
 
-  // Memoria de la conversación actual
-  const conversationHistory = [];
+  // Recuperar la conversación guardada durante la sesión
+  const conversationHistory = loadConversationHistory();
+
+  // Mostrar la conversación recuperada
+  restoreConversation();
 
   chatForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -30,6 +35,9 @@ export function initChat() {
       role: "user",
       content: message
     });
+
+    // Guardar historial en la sesión
+    saveConversationHistory();
 
     // Limpiar input
     messageInput.value = "";
@@ -68,6 +76,9 @@ export function initChat() {
         content: data.reply
       });
 
+      // Actualizar historial guardado
+      saveConversationHistory();
+
     } catch (error) {
       // Ocultar estado de escritura
       hideTypingIndicator();
@@ -80,7 +91,55 @@ export function initChat() {
     }
   });
 
-  function addUserMessage(message) {
+  function loadConversationHistory() {
+    const savedHistory = sessionStorage.getItem(CHAT_HISTORY_KEY);
+
+    if (!savedHistory) {
+      return [];
+    }
+
+    try {
+      const parsedHistory = JSON.parse(savedHistory);
+
+      if (!Array.isArray(parsedHistory)) {
+        return [];
+      }
+
+      return parsedHistory;
+    } catch (error) {
+      console.error(
+        "No se pudo recuperar el historial de Jadoo:",
+        error
+      );
+
+      sessionStorage.removeItem(CHAT_HISTORY_KEY);
+
+      return [];
+    }
+  }
+
+  function saveConversationHistory() {
+    sessionStorage.setItem(
+      CHAT_HISTORY_KEY,
+      JSON.stringify(conversationHistory)
+    );
+  }
+
+  function restoreConversation() {
+    conversationHistory.forEach((message) => {
+      if (message.role === "user") {
+        addUserMessage(message.content, false);
+      }
+
+      if (message.role === "model") {
+        addJadooMessage(message.content, false);
+      }
+    });
+
+    scrollToBottom();
+  }
+
+  function addUserMessage(message, shouldScroll = true) {
     const messageElement = document.createElement("div");
 
     messageElement.className = "message message-user";
@@ -102,7 +161,9 @@ export function initChat() {
 
     messagesContainer.appendChild(messageElement);
 
-    scrollToBottom();
+    if (shouldScroll) {
+      scrollToBottom();
+    }
   }
 
   function showTypingIndicator() {
@@ -135,7 +196,7 @@ export function initChat() {
     }
   }
 
-  function addJadooMessage(message) {
+  function addJadooMessage(message, shouldScroll = true) {
     const messageElement = document.createElement("div");
 
     messageElement.className = "message message-jadoo";
@@ -162,7 +223,9 @@ export function initChat() {
 
     messagesContainer.appendChild(messageElement);
 
-    scrollToBottom();
+    if (shouldScroll) {
+      scrollToBottom();
+    }
   }
 
   function scrollToBottom() {
