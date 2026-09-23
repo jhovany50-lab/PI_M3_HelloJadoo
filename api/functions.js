@@ -42,7 +42,7 @@ export default async function handler(req, res) {
       ? history.slice(0, -1)
       : [];
 
-    const recentHistory = previousHistory.slice(-10);
+    const recentHistory = previousHistory;
 
     const conversationHistory = recentHistory
       .filter(

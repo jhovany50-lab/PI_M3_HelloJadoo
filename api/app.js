@@ -88,7 +88,7 @@ ${JSON.stringify(results, null, 2)}
 
     // Limitamos el historial para evitar enviar
     // conversaciones demasiado largas a Gemini.
-    const recentHistory = previousHistory.slice(-10);
+    const recentHistory = previousHistory;
 
     const conversationHistory = recentHistory
       .filter(
