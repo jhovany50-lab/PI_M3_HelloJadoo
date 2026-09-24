@@ -1,6 +1,8 @@
 import { getUserProfile } from "./welcome.js";
+import { sendChatMessage } from "./chatApi.js";
 
-const CHAT_HISTORY_KEY = "jadooConversationHistory";
+let conversationHistory = [];
+let isSending = false;
 
 export function initChat() {
   const userProfile = getUserProfile();
@@ -12,20 +14,22 @@ export function initChat() {
     return;
   }
 
-  // Recuperar la conversación guardada durante la sesión
-  const conversationHistory = loadConversationHistory();
-
-  // Mostrar la conversación recuperada
   restoreConversation();
 
   chatForm.addEventListener("submit", async (event) => {
     event.preventDefault();
+
+    if (isSending) {
+      return;
+    }
 
     const message = messageInput.value.trim();
 
     if (!message) {
       return;
     }
+
+    isSending = true;
 
     // Mostrar mensaje del usuario
     addUserMessage(message);
@@ -35,10 +39,6 @@ export function initChat() {
       role: "user",
       content: message
     });
-
-    // Guardar historial en la sesión
-    saveConversationHistory();
-
     // Limpiar input
     messageInput.value = "";
 
@@ -46,23 +46,11 @@ export function initChat() {
     showTypingIndicator();
 
     try {
-      const response = await fetch("/api/functions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          message: message,
-          history: conversationHistory,
-          userProfile
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Error en el servidor");
-      }
+      const data = await sendChatMessage(
+        message,
+        conversationHistory,
+        userProfile
+      );
 
       // Ocultar estado de escritura
       hideTypingIndicator();
@@ -76,68 +64,19 @@ export function initChat() {
         content: data.reply
       });
 
-      // Actualizar historial guardado
-      saveConversationHistory();
+      } catch (error) {
+        // Ocultar estado de escritura
+        hideTypingIndicator();
 
-    } catch (error) {
-      // Ocultar estado de escritura
-      hideTypingIndicator();
+        console.error("Error al comunicarse con la API:", error);
 
-      console.error("Error al comunicarse con la API:", error);
-
-      addJadooMessage(
-        "Ups 💗 No pude comunicarme con el servidor."
-      );
-    }
-  });
-
-  function loadConversationHistory() {
-    const savedHistory = sessionStorage.getItem(CHAT_HISTORY_KEY);
-
-    if (!savedHistory) {
-      return [];
-    }
-
-    try {
-      const parsedHistory = JSON.parse(savedHistory);
-
-      if (!Array.isArray(parsedHistory)) {
-        return [];
-      }
-
-      return parsedHistory;
-    } catch (error) {
-      console.error(
-        "No se pudo recuperar el historial de Jadoo:",
-        error
-      );
-
-      sessionStorage.removeItem(CHAT_HISTORY_KEY);
-
-      return [];
-    }
-  }
-
-  function saveConversationHistory() {
-    sessionStorage.setItem(
-      CHAT_HISTORY_KEY,
-      JSON.stringify(conversationHistory)
-    );
-  }
-
-  function restoreConversation() {
-    conversationHistory.forEach((message) => {
-      if (message.role === "user") {
-        addUserMessage(message.content, false);
-      }
-
-      if (message.role === "model") {
-        addJadooMessage(message.content, false);
+        addJadooMessage(
+          "Ups 💗 No pude comunicarme con el servidor."
+        );
+      } finally {
+        isSending = false;
       }
     });
-
-    scrollToBottom();
-  }
 
   function addUserMessage(message, shouldScroll = true) {
     const messageElement = document.createElement("div");
@@ -226,6 +165,20 @@ export function initChat() {
     if (shouldScroll) {
       scrollToBottom();
     }
+  }
+
+    function restoreConversation() {
+    conversationHistory.forEach((message) => {
+      if (message.role === "user") {
+        addUserMessage(message.content, false);
+      }
+
+      if (message.role === "model") {
+        addJadooMessage(message.content, false);
+      }
+    });
+
+    scrollToBottom();
   }
 
   function scrollToBottom() {

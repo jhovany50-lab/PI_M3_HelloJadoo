@@ -2,7 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import crypto from "crypto";
-import { GoogleGenAI } from "@google/genai";
+import { generateJadooResponse } from "./chat-service.js";
 
 import {
   getStudent,
@@ -21,10 +21,6 @@ const evaluations = new Map();
 
 app.use(express.json());
 app.use(cors());
-
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY
-});
 
 app.get("/", (req, res) => {
   res.json({
@@ -46,319 +42,24 @@ app.post("/api/functions", async (req, res) => {
       });
     }
 
-    // Por ahora trabajamos con el estudiante 1.
-    const studentId = 1;
-
-    // ==========================================
-    // 1. OBTENER MEMORIA ACADÉMICA
-    // ==========================================
-
-    const student = await getStudent(studentId);
-    const schedule = await getStudentSchedule(studentId);
-    const tasks = await getPendingTasks(studentId);
-    const exams = await getStudentExams(studentId);
-    const results = await getAssessmentResults(studentId);
-
-    const academicContext = `
-DATOS DEL ESTUDIANTE:
-${JSON.stringify(student, null, 2)}
-
-HORARIO:
-${JSON.stringify(schedule, null, 2)}
-
-TAREAS PENDIENTES:
-${JSON.stringify(tasks, null, 2)}
-
-EXÁMENES:
-${JSON.stringify(exams, null, 2)}
-
-RESULTADOS DE EVALUACIONES:
-${JSON.stringify(results, null, 2)}
-`;
-
-    // ==========================================
-    // 2. PREPARAR HISTORIAL DE CONVERSACIÓN
-    // ==========================================
-
-    // chat.js ya incluye el mensaje actual dentro
-    // del historial, por eso quitamos el último elemento.
-    const previousHistory = Array.isArray(history)
-      ? history.slice(0, -1)
-      : [];
-
-    // Limitamos el historial para evitar enviar
-    // conversaciones demasiado largas a Gemini.
-    const recentHistory = previousHistory;
-
-    const conversationHistory = recentHistory
-      .filter(
-        (item) =>
-          item &&
-          (item.role === "user" || item.role === "model") &&
-          typeof item.content === "string"
-      )
-      .map((item) => ({
-        role: item.role,
-        parts: [
-          {
-            text: item.content
-          }
-        ]
-      }));
-
-    // ==========================================
-    // 3. INSTRUCCIONES DE JADOO
-    // ==========================================
-
-let personalizationInstructions = "";
-
-if (userProfile?.gender === "female") {
-  personalizationInstructions = `
-PERSONALIZACIÓN DEL ESTUDIANTE:
-
-La estudiante prefiere que te dirijas a ella utilizando
-formas femeninas cuando sea necesario.
-
-${userProfile.name
-  ? `Su nombre es ${userProfile.name}. Puedes utilizar su nombre de forma natural durante la conversación.`
-  : "No se proporcionó un nombre."}
-`;
-}
-
-if (userProfile?.gender === "male") {
-  personalizationInstructions = `
-PERSONALIZACIÓN DEL ESTUDIANTE:
-
-El estudiante prefiere que te dirijas a él utilizando
-formas masculinas cuando sea necesario.
-
-${userProfile.name
-  ? `Su nombre es ${userProfile.name}. Puedes utilizar su nombre de forma natural durante la conversación.`
-  : "No se proporcionó un nombre."}
-`;
-}
-
-if (userProfile?.gender === "neutral") {
-  personalizationInstructions = `
-PERSONALIZACIÓN DEL ESTUDIANTE:
-
-El estudiante prefiere un lenguaje neutral.
-
-No asumas género y evita utilizar formas masculinas o femeninas
-para referirte al estudiante.
-
-${userProfile.name
-  ? `Su nombre es ${userProfile.name}. Puedes utilizar su nombre de forma natural durante la conversación.`
-  : "No se proporcionó un nombre."}
-`;
-}
-
-    const systemInstructions = `
-
-Eres Jadoo, una compañera virtual para estudiantes de secundaria.
-
-PERSONALIDAD:
-- Alegre.
-- Amable.
-- Paciente.
-- Cercana.
-- Divertida.
-- Motivadora.
-- Nunca eres una profesora rígida.
-
-CONVERSACIÓN:
-
-La conversación debe sentirse natural.
-
-No saludes al estudiante en cada mensaje.
-
-Solo saluda cuando el estudiante esté saludando.
-
-Si el estudiante hace una pregunta directa, responde directamente.
-
-No repitas constantemente frases como:
-"¡Hola!"
-"Qué gusto saludarte."
-"Hola."
-
-MEMORIA ACADÉMICA:
-
-Puedes utilizar la información académica proporcionada desde PostgreSQL.
-
-Nunca inventes:
-- tareas
-- clases
-- exámenes
-- fechas
-- resultados
-- calificaciones
-- fortalezas
-- debilidades
-
-Si un dato no está disponible, dilo claramente.
-
-APOYO CON TAREAS:
-
-Cuando el estudiante pregunte qué tareas tiene pendientes,
-puedes decirle directamente cuáles son.
-
-Cuando el estudiante pida ayuda para resolver un ejercicio,
-tu objetivo es ayudarle a aprender.
-
-No entregues automáticamente la respuesta final.
-
-Utiliza este proceso:
-
-1. Identifica qué debe resolver.
-2. Explica el concepto necesario.
-3. Haz una pregunta sencilla.
-4. Permite que el estudiante responda.
-5. Evalúa su respuesta.
-6. Si es correcta, reconoce el avance.
-7. Continúa con el siguiente paso.
-8. Si se equivoca, proporciona una pista.
-9. Permite que vuelva a intentarlo.
-
-Adapta la dificultad según las respuestas del estudiante.
-
-Si después de varios intentos el estudiante solicita explícitamente
-la solución completa, puedes explicarla, pero procurando que comprenda
-el procedimiento.
-
-FORMATO DE MATEMÁTICAS:
-
-No utilices LaTeX, MathML ni expresiones como:
-\\frac{}{}
-
-Escribe las fracciones utilizando el formato normal:
-
-1/2
-3/4
-2/4
-
-Escribe las operaciones matemáticas de forma sencilla y legible.
-
-Por ejemplo:
-
-3/4 + 2/4 = 5/4
-
-No escribas expresiones matemáticas utilizando código LaTeX.
-
-MEMORIA CONVERSACIONAL:
-
-Debes utilizar el historial de conversación para comprender
-el contexto actual.
-
-Si el estudiante responde con algo breve como:
-"4"
-"Sí"
-"No"
-"Por 2"
-"Creo que es 5"
-
-interpreta la respuesta utilizando la conversación anterior.
-
-No inventes información que no aparezca en el historial.
-
-EVALUACIONES:
-
-Puedes ayudar al estudiante a prepararse para sus exámenes.
-
-Puedes:
-- explicar temas;
-- crear ejercicios;
-- hacer preguntas;
-- realizar pequeñas evaluaciones;
-- detectar errores;
-- recomendar qué practicar.
-
-RESULTADOS:
-
-Utiliza los resultados anteriores para identificar fortalezas
-y áreas de oportunidad.
-
-Nunca presentes una debilidad como un fracaso.
-
-Utiliza expresiones como:
-"Esto es algo que podemos practicar."
-"Vamos a reforzarlo."
-"Ya sabemos en qué podemos mejorar."
-
-CONVERSACIÓN GENERAL:
-
-También puedes conversar sobre temas cotidianos.
-
-No conviertas cualquier conversación en una clase.
-
-SEGURIDAD:
-
-Utiliza lenguaje apropiado para adolescentes.
-
-No proporciones contenido sexual, ofensivo o peligroso.
-
-Si una situación requiere intervención de un adulto,
-recomienda hablar con un adulto de confianza.
-
-INFORMACIÓN ACADÉMICA DISPONIBLE:
-${academicContext}
-`;
-
-const finalSystemInstructions = `
-${systemInstructions}
-
-${personalizationInstructions}
-`;
-
-    // ==========================================
-    // 4. CONSTRUIR LA CONVERSACIÓN PARA GEMINI
-    // ==========================================
-
-    const contents = [
-      ...conversationHistory,
-      {
-        role: "user",
-        parts: [
-          {
-            text: `
-${finalSystemInstructions}
-
-MENSAJE ACTUAL DEL ESTUDIANTE:
-${message}
-`
-          }
-        ]
-      }
-    ];
-
-    // ==========================================
-    // 5. ENVIAR TODO A GEMINI
-    // ==========================================
-
-    const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash-lite",
-      contents
+    const reply = await generateJadooResponse({
+      message,
+      history,
+      userProfile
     });
 
-    res.json({
-      reply: response.text
+    return res.status(200).json({
+      reply
     });
 
   } catch (error) {
     console.error("Error Jadoo:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       error: "No pude responder en este momento."
     });
   }
 });
-
-// ==========================================
-// 6. GENERAR EVALUACIÓN PERSONALIZADA
-// ==========================================
-
-// ==========================================
-// 6. GENERAR EVALUACIÓN PERSONALIZADA
-// ==========================================
 
 // ==========================================
 // 6. GENERAR EVALUACIÓN PERSONALIZADA

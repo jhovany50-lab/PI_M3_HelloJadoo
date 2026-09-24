@@ -1,4 +1,5 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
+import { sendChatMessage } from "../src/chatApi.js";
 
 import {
   normalizeMessage,
@@ -62,6 +63,65 @@ describe("Utilidades de Hello Jadoo", () => {
       message: "¿Cómo estás?",
       history
     });
+  });
+
+    it("debería obtener correctamente la respuesta de Jadoo desde la API", async () => {
+    const mockResponse = {
+      ok: true,
+      json: vi.fn().mockResolvedValue({
+        reply: "¡Hola! ¿Cómo estás?"
+      })
+    };
+
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(mockResponse));
+
+    const result = await sendChatMessage(
+      "Hola Jadoo",
+      [],
+      null
+    );
+
+    expect(result).toEqual({
+      reply: "¡Hola! ¿Cómo estás?"
+    });
+
+    expect(fetch).toHaveBeenCalledWith(
+      "/api/functions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: "Hola Jadoo",
+          history: [],
+          userProfile: null
+        })
+      }
+    );
+
+    vi.unstubAllGlobals();
+  });
+
+    it("debería manejar correctamente un error de la API", async () => {
+    const mockResponse = {
+      ok: false,
+      json: vi.fn().mockResolvedValue({
+        error: "Error en el servidor"
+      })
+    };
+
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(mockResponse));
+
+    await expect(
+      sendChatMessage(
+        "Hola Jadoo",
+        [],
+        null
+      )
+    ).rejects.toThrow("Error en el servidor");
+
+    vi.unstubAllGlobals();
   });
 
 });

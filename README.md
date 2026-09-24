@@ -282,13 +282,13 @@ Hello Jadoo utiliza **Google Gemini** para generar las respuestas de la compañe
 La comunicación se realiza mediante una función Serverless ubicada en:
 
 ```text
-api/chat.js
+api/functions.js
 ```
 
 El frontend realiza una petición:
 
 ```text
-POST /api/chat
+POST /api/functions
 ```
 
 La petición contiene:
@@ -396,6 +396,25 @@ Se implementaron:
 
 La interfaz fue revisada en diferentes tamaños de pantalla para comprobar la adaptación del contenido.
 
+### 📐 Tamaños de prueba
+
+La interfaz fue probada en tres tamaños de pantalla representativos:
+
+| Dispositivo | Resolución |
+|---|---:|
+| 📱 Móvil | 375 × 667 px |
+| 📱 Tablet | 768 × 1024 px |
+| 🖥️ Desktop | 1440 × 900 px |
+
+En los tres tamaños se verificó:
+
+- Navegación entre las vistas `/home`, `/chat` y `/about`.
+- Visualización correcta de los contenidos.
+- Uso del formulario de chat.
+- Adaptación de las burbujas de conversación.
+- Ausencia de desbordamiento horizontal.
+- Legibilidad y distribución de los elementos.
+
 ---
 
 ## 🧪 Pruebas unitarias
@@ -488,7 +507,7 @@ https://pi-m3-hello-jadoo-p1wr.vercel.app
 La función utilizada para la comunicación con Gemini es:
 
 ```text
-/api/chat
+/api/functions
 ```
 
 La aplicación se conecta con Google Gemini desde el backend Serverless, evitando exponer la clave de API en el navegador.
