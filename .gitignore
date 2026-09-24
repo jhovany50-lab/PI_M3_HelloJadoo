@@ -2,3 +2,4 @@
 node_modules/
 dist/
 PI_M3_HelloJadoo/
+.vercel

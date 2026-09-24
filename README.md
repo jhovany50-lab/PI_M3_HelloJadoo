@@ -115,7 +115,9 @@ El objetivo es favorecer el aprendizaje y la comprensión del procedimiento.
 - pgAdmin
 - node-postgres (`pg`)
 
-Los componentes de PostgreSQL se conservaron como parte del desarrollo y las pruebas de funcionalidades académicas del proyecto.
+PostgreSQL se mantiene como parte de la infraestructura de desarrollo del proyecto para las funcionalidades académicas de evaluación y práctica.
+
+La comunicación principal del chat con Jadoo no depende de PostgreSQL. El chat utiliza directamente la Serverless Function y el servicio de Gemini.
 
 ### Pruebas
 
@@ -139,22 +141,29 @@ PI_M3_HelloJadoo/
 │
 ├── api/
 │   ├── app.js
-│   ├── chat.js
+│   ├── chat-service.js
+│   ├── functions.js
 │   ├── server.js
+│   ├── server-pi.js
 │   └── server-pi-local.js
 │
 ├── db/
 │   ├── config.js
 │   ├── queries.js
-│   └── archivos de prueba
+│   ├── test-connection.js
+│   ├── test-practice.js
+│   └── test-queries.js
 │
 ├── src/
 │   ├── app.js
 │   ├── chat.js
+│   ├── chatApi.js
 │   ├── evaluation.js
 │   ├── index.html
+│   ├── router.js
 │   ├── styles.css
-│   └── utils.js
+│   ├── utils.js
+│   └── welcome.js
 │
 ├── tests/
 │   └── prueba.test.js
@@ -168,6 +177,7 @@ PI_M3_HelloJadoo/
 ├── .gitignore
 ├── package.json
 ├── package-lock.json
+├── README.md
 ├── server.js
 ├── vercel.json
 └── vite.config.js
@@ -251,6 +261,12 @@ El archivo `.env` contiene información sensible y se encuentra incluido en `.gi
 npm run dev
 ```
 
+El frontend estará disponible en:
+
+```text
+http://localhost:5173
+```
+
 ### 6. Ejecutar la API local
 
 En otra terminal:
@@ -279,6 +295,28 @@ vercel dev
 
 Hello Jadoo utiliza **Google Gemini** para generar las respuestas de la compañera virtual.
 
+### Arquitectura de comunicación
+
+El flujo de comunicación del chat se organiza de la siguiente manera:
+
+Frontend
+→ `src/chat.js`
+→ `src/chatApi.js`
+→ `POST /api/functions`
+→ `api/functions.js`
+→ `api/chat-service.js`
+→ Google Gemini
+
+`src/chat.js` gestiona la interfaz del chat y el historial de la conversación.
+
+`src/chatApi.js` realiza la petición HTTP al endpoint `/api/functions`.
+
+`api/functions.js` funciona como Serverless Function en Vercel y recibe el mensaje, el historial y la información de personalización.
+
+`api/chat-service.js` concentra la configuración de Gemini y el `systemInstruction` de Jadoo. Desde este servicio se realiza la comunicación con Google Gemini.
+
+La clave `GEMINI_API_KEY` permanece únicamente en el servidor y no se envía desde el navegador.
+
 La comunicación se realiza mediante una función Serverless ubicada en:
 
 ```text
@@ -295,6 +333,7 @@ La petición contiene:
 
 - El mensaje actual del estudiante.
 - El historial de conversación.
+- La información de personalización del estudiante cuando está disponible.
 
 La función Serverless recibe la información y utiliza Google Gemini para generar la respuesta.
 
@@ -427,6 +466,20 @@ Para ejecutar las pruebas:
 npm test -- --run
 ```
 
+### Pruebas realizadas
+
+Las pruebas verifican diferentes partes de la lógica del proyecto:
+
+1. Normalización de mensajes.
+2. Validación de mensajes.
+3. Rechazo de mensajes vacíos.
+4. Construcción del historial de conversación.
+5. Construcción de la petición enviada al chat.
+6. Comunicación correcta con la API mediante `fetch`.
+7. Manejo de errores devueltos por la API.
+
+Las pruebas de comunicación con la API utilizan mocks de `fetch` para comprobar el comportamiento del frontend sin depender de un servidor real.
+
 Actualmente se incluyen pruebas para:
 
 - Normalización de mensajes.
@@ -439,7 +492,7 @@ Resultado actual:
 
 ```text
 Test Files  1 passed
-Tests       5 passed
+Tests       7 passed
 ```
 
 ---
